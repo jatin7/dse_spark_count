@@ -1,6 +1,9 @@
 Spark Cassandra Counter
 =======================
 
+Total Links = 231,606,008 
+
+
 Load Data into MySQL
 ====================
 
