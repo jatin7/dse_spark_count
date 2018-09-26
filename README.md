@@ -1,17 +1,11 @@
 Spark Cassandra Counter
 =======================
 
-### Table Counter
+Load Data into MySQL
+====================
+
 ```
---------------------------------
-./run.sh top vdomain 10000
-./run.sh top ldomain 1000000
---------------------------------
-./run.sh total
-./run.sh links
-./run.sh create_table result2
---------------------------------
-./run.sh clear
+m -e "LOAD DATA LOCAL INFILE '/root/spark-cassandra-count/data/new-health-data.dat' INTO TABLE engine1.table1"
 ```
 
 ### Clean Cache
@@ -19,4 +13,3 @@ Spark Cassandra Counter
 $ rm -fR ~/.m2/
 $ rm -fR ~/.ivy2/
 ```
-

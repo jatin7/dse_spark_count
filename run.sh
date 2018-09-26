@@ -1,6 +1,16 @@
 #!/bin/bash
-#-------------------------------------------------------------------#
-if [ "$1" == "1" ]; then
+#---------------------------------------------------------------------------------------#
+if [ -z "$1" ]; then
+
+  echo "+-----------------------------------------------+"
+  echo "|  1. Retrieve Health Domains to cloud2.health  |"
+  echo "|  2. Total Links                               |"
+  echo "|  3. Reading File                              |"
+  echo "|  4. Export Health Links                       |"
+  echo "+-----------------------------------------------+"
+
+#---------------------------------------------------------------------------------------#
+elif [ "$1" == "1" ]; then
 spark-submit    \
   --class "Domains"         \
   --master local[16]        \
@@ -10,6 +20,7 @@ spark-submit    \
   /root/spark-cassandra-count/data/diseases.dat 
 
   
+#---------------------------------------------------------------------------------------#
 elif [ "$1" == "2" ]; then
 spark-submit    \
   --class "Links"           \
@@ -18,6 +29,7 @@ spark-submit    \
   --executor-memory 32G     \
   target/scala-2.11/spark-cassandra-count_2.11-1.0.jar  
 
+#---------------------------------------------------------------------------------------#
 elif [ "$1" == "3" ]; then
 spark-submit    \
   --class "Files"           \
@@ -27,6 +39,7 @@ spark-submit    \
   target/scala-2.11/spark-cassandra-count_2.11-1.0.jar \
   /root/spark-cassandra-count/data/diseases.dat 
 
+#---------------------------------------------------------------------------------------#
 elif [ "$1" == "4" ]; then
 spark-submit    \
   --class "ExportLinks"     \
@@ -36,16 +49,6 @@ spark-submit    \
   target/scala-2.11/spark-cassandra-count_2.11-1.0.jar links \
   /root/spark-cassandra-count/data/health.dat 
 
-#-------------------------------------------------------------------#
-else
-
-  echo "+-----------------------------------------------+"
-  echo "|  1. Retrieve Health Domains to cloud2.health  |"
-  echo "|  2. Total Links                               |"
-  echo "|  3. Reading File                              |"
-  echo "|  4. Export Health Links                       |"
-  echo "+-----------------------------------------------+"
-
 fi
-#-------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------#
 
