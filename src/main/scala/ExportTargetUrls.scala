@@ -9,7 +9,7 @@ import scala.io.Source
 //case class Row(name: String, count: BigInt)
 
 /*---------------------------------------------------------------------------------------*/
-object Domains {
+object ExportTargetUrls {
 
     val locale = new java.util.Locale("us", "US")
     val formatter = java.text.NumberFormat.getIntegerInstance(locale)
@@ -17,7 +17,7 @@ object Domains {
     /*-------------------------------------------------------------------------------------*/
     def main(args: Array[String]) {
 
-        val table_name = if (args(0).length == 0) "vdomain" else args(0)
+        val table_name = if (args(0).length == 0) "links1" else args(0)
         val file_name  = if (args(1).length == 0) { 
             Console.err.println("Need filename argument")
             sys.exit(1) 
@@ -28,7 +28,7 @@ object Domains {
         println("+----------------------------------------------------------")
 
         export_health_domains(table_name, file_name)
-        cassandra_table_count("health")
+        cassandra_table_count("target")
 
     }
 
@@ -43,13 +43,13 @@ object Domains {
 
         val spark = SparkSession
             .builder()
-            .appName("TopDomains")
+            .appName("ExportTargetUrls")
             .config("spark.cassandra.connection.host", "127.0.0.1")
             .getOrCreate()
 
 
         val df1 = spark.read
-            .cassandraFormat("vdomain", "cloud1", "Cassandra Cluster")
+            .cassandraFormat("links1", "cloud1", "Cassandra Cluster")
             .load().cache()
         df1.createOrReplaceTempView("table1")
 
@@ -57,7 +57,7 @@ object Domains {
         for(disease <- diseases) {
 
             /*--- Read from Cassandra ---*/
-            val SQL = "SELECT * FROM table1 WHERE domain like '%"+disease+"%'"
+            val SQL = "SELECT * FROM table1 WHERE links1 like '%"+disease+"%'"
             println(SQL)
             val df2 = spark.sql(SQL)
             df2.show(10, false)
@@ -66,7 +66,7 @@ object Domains {
             df2.write
                 .format("org.apache.spark.sql.cassandra")
                 .mode("append") //.mode("overwrite")
-                .options(Map("table" -> "health", "keyspace" -> "cloud1"))
+                .options(Map("table" -> "target", "keyspace" -> "cloud1"))
                 .save()
         }
         
