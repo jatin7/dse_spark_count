@@ -3,8 +3,8 @@
 if [ -z "$1" ]; then
 
   echo "+-----------------------------------------------+"
-  echo "|  1. Retrieve Health Domains to cloud2.health  |"
-  echo "|  2. Total Links                               |"
+  echo "|  1. Total Links                               |"
+  echo "|  2. Retrieve Health Domains to cloud1.health  |"
   echo "|  3. Reading File                              |"
   echo "|  4. Export Health Links                       |"
   echo "+-----------------------------------------------+"
@@ -12,23 +12,24 @@ if [ -z "$1" ]; then
 #---------------------------------------------------------------------------------------#
 elif [ "$1" == "1" ]; then
 spark-submit    \
-  --class "Domains"         \
-  --master local[16]        \
-  --driver-memory   32G     \
-  --executor-memory 32G     \
-  target/scala-2.11/spark-cassandra-count_2.11-1.0.jar vdomain \
-  /root/spark-cassandra-count/data/diseases.dat 
-
-  
-#---------------------------------------------------------------------------------------#
-elif [ "$1" == "2" ]; then
-spark-submit    \
   --class "Links"           \
   --master local[16]        \
   --driver-memory   32G     \
   --executor-memory 32G     \
   target/scala-2.11/spark-cassandra-count_2.11-1.0.jar  
 
+
+#---------------------------------------------------------------------------------------#
+elif [ "$1" == "2" ]; then
+spark-submit    \
+  --class "Domains"         \
+  --master local[16]        \
+  --driver-memory   32G     \
+  --executor-memory 32G     \
+  target/scala-2.11/spark-cassandra-count_2.11-1.0.jar vdomain  \
+  data/diseases.dat 
+
+  
 #---------------------------------------------------------------------------------------#
 elif [ "$1" == "3" ]; then
 spark-submit    \
@@ -36,8 +37,8 @@ spark-submit    \
   --master local[16]        \
   --driver-memory   32G     \
   --executor-memory 32G     \
-  target/scala-2.11/spark-cassandra-count_2.11-1.0.jar \
-  /root/spark-cassandra-count/data/diseases.dat 
+  target/scala-2.11/spark-cassandra-count_2.11-1.0.jar  \
+  data/diseases.dat 
 
 #---------------------------------------------------------------------------------------#
 elif [ "$1" == "4" ]; then
@@ -46,8 +47,8 @@ spark-submit    \
   --master local[16]        \
   --driver-memory   32G     \
   --executor-memory 32G     \
-  target/scala-2.11/spark-cassandra-count_2.11-1.0.jar links \
-  /root/spark-cassandra-count/data/health.dat 
+  target/scala-2.11/spark-cassandra-count_2.11-1.0.jar links1   \
+  data/health1.dat 
 
 fi
 #---------------------------------------------------------------------------------------#
